@@ -256,7 +256,7 @@ class CalendarView : ConstraintLayout {
         /** 셀 뷰홀더 */
         inner class CellViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            private val itemCalendarTextviewContent: TextView = itemView.findViewById(R.id.item_calendar_textview_content)
+            private val itemCalendarCellTextviewContent: TextView = itemView.findViewById(R.id.item_calendar_cell_textview_content)
 
             private var item: LocalDate? = null
 
@@ -277,30 +277,30 @@ class CalendarView : ConstraintLayout {
 
                 //셀 컨텐츠 세팅
                 when (position) {
-                    0 -> itemCalendarTextviewContent.text = DayOfWeek.SUNDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-                    1 -> itemCalendarTextviewContent.text = DayOfWeek.MONDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-                    2 -> itemCalendarTextviewContent.text = DayOfWeek.TUESDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-                    3 -> itemCalendarTextviewContent.text = DayOfWeek.WEDNESDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-                    4 -> itemCalendarTextviewContent.text = DayOfWeek.THURSDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-                    5 -> itemCalendarTextviewContent.text = DayOfWeek.FRIDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
-                    6 -> itemCalendarTextviewContent.text = DayOfWeek.SATURDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    0 -> itemCalendarCellTextviewContent.text = DayOfWeek.SUNDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    1 -> itemCalendarCellTextviewContent.text = DayOfWeek.MONDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    2 -> itemCalendarCellTextviewContent.text = DayOfWeek.TUESDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    3 -> itemCalendarCellTextviewContent.text = DayOfWeek.WEDNESDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    4 -> itemCalendarCellTextviewContent.text = DayOfWeek.THURSDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    5 -> itemCalendarCellTextviewContent.text = DayOfWeek.FRIDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
+                    6 -> itemCalendarCellTextviewContent.text = DayOfWeek.SATURDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
                     else -> if (item != null) {
                         if (selectedDate != null && selectedDate == item) {
                             selectDate(item!!, itemView) //날짜 선택
                         }
 
-                        itemCalendarTextviewContent.text = "${item!!.dayOfMonth}"
+                        itemCalendarCellTextviewContent.text = "${item!!.dayOfMonth}"
 
                         itemView.setBackgroundResource(R.drawable.selector_calendar_cell)
                     } else {
-                        itemCalendarTextviewContent.text = ""
+                        itemCalendarCellTextviewContent.text = ""
                     }
                 }
 
                 //셀 컨텐츠 색상 세팅
                 when (position % 7) {
-                    0 -> itemCalendarTextviewContent.setTextColor(ContextCompat.getColor(context, R.color.sunday))
-                    6 -> itemCalendarTextviewContent.setTextColor(ContextCompat.getColor(context, R.color.saturday))
+                    0 -> itemCalendarCellTextviewContent.setTextColor(ContextCompat.getColor(context, R.color.sunday))
+                    6 -> itemCalendarCellTextviewContent.setTextColor(ContextCompat.getColor(context, R.color.saturday))
                 }
             }
 
