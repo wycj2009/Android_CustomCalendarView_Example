@@ -14,6 +14,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -274,6 +275,7 @@ class CalendarView : ConstraintLayout {
             fun setItem(position: Int) {
                 this.item = cellInfoList[position]
 
+                //셀 컨텐츠 세팅
                 when (position) {
                     0 -> itemCalendarTextviewContent.text = DayOfWeek.SUNDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
                     1 -> itemCalendarTextviewContent.text = DayOfWeek.MONDAY.getDisplayName(TextStyle.NARROW, Locale.getDefault())
@@ -293,6 +295,12 @@ class CalendarView : ConstraintLayout {
                     } else {
                         itemCalendarTextviewContent.text = ""
                     }
+                }
+
+                //셀 컨텐츠 색상 세팅
+                when (position % 7) {
+                    0 -> itemCalendarTextviewContent.setTextColor(ContextCompat.getColor(context, R.color.sunday))
+                    6 -> itemCalendarTextviewContent.setTextColor(ContextCompat.getColor(context, R.color.saturday))
                 }
             }
 
