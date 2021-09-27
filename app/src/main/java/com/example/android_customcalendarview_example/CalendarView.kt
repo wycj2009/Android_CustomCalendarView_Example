@@ -291,7 +291,7 @@ class CalendarView : ConstraintLayout {
 
                         itemCalendarTextviewContent.text = "${item!!.dayOfMonth}"
 
-                        itemView.setBackgroundResource(R.drawable.selector_cell)
+                        itemView.setBackgroundResource(R.drawable.selector_cell_calendar)
                     } else {
                         itemCalendarTextviewContent.text = ""
                     }
