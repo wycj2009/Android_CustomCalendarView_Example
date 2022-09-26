@@ -1,6 +1,8 @@
 package com.example.android_customcalendarview_example
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.Gravity
@@ -101,6 +103,10 @@ class CalendarView @JvmOverloads constructor(
                 if (dateOfCell != null) {
                     text = "${dateOfCell.dayOfMonth}"
                     foreground = ContextCompat.getDrawable(context, R.drawable.effect_calendar_cell)
+                    if (dateOfCell == today) {
+                        setTextColor(Color.BLACK)
+                        setTypeface(null, Typeface.BOLD)
+                    }
                     if (dateOfCell == selectedDate) {
                         isSelected = true
                         selectedCell = this
