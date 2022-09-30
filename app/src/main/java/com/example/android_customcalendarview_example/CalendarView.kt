@@ -8,9 +8,14 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationSet
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.GridLayout
 import android.widget.GridLayout.UNDEFINED
 import android.widget.GridLayout.spec
+import android.widget.Space
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.PagerAdapter
@@ -39,7 +44,9 @@ class CalendarView @JvmOverloads constructor(
     private var selectedCell: View? = null
     private val pagerAdapter = object : PagerAdapter() {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val page = GridLayout(context).apply {
+            return GridLayout(context).apply {
+                tag = position
+
                 columnCount = 7
                 rowCount = 7
 
@@ -63,9 +70,9 @@ class CalendarView @JvmOverloads constructor(
                 for (i in 0 until 42) {
                     addView(generateDayOfMonthCell(if (i in firstCellIdx..lastCellIdx) firstDayOfMonth.plusDays((i - firstCellIdx).toLong()) else null))
                 }
+            }.also {
+                container.addView(it)
             }
-            container.addView(page)
-            return page
         }
 
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -84,6 +91,8 @@ class CalendarView @JvmOverloads constructor(
         private fun generateDayOfWeekCell(dayOfWeek: DayOfWeek): View {
             return TextView(context).apply {
                 layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = 0
                     columnSpec = spec(UNDEFINED, 1f)
                     rowSpec = spec(UNDEFINED, 1f)
                     gravity = Gravity.CENTER
@@ -94,13 +103,24 @@ class CalendarView @JvmOverloads constructor(
 
         /** 일 셀 생성 (커스텀 가능) */
         private fun generateDayOfMonthCell(dateOfCell: LocalDate?): View {
-            return TextView(context).apply {
-                layoutParams = GridLayout.LayoutParams().apply {
-                    columnSpec = spec(UNDEFINED, 1f)
-                    rowSpec = spec(UNDEFINED, 1f)
-                    gravity = Gravity.CENTER
+            return if (dateOfCell == null) {
+                Space(context).apply {
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        width = 0
+                        height = 0
+                        columnSpec = spec(UNDEFINED, 1f)
+                        rowSpec = spec(UNDEFINED, 1f)
+                    }
                 }
-                if (dateOfCell != null) {
+            } else {
+                TextView(context).apply {
+                    layoutParams = GridLayout.LayoutParams().apply {
+                        width = 0
+                        height = 0
+                        columnSpec = spec(UNDEFINED, 1f)
+                        rowSpec = spec(UNDEFINED, 1f)
+                        gravity = Gravity.CENTER
+                    }
                     text = "${dateOfCell.dayOfMonth}"
                     foreground = ContextCompat.getDrawable(context, R.drawable.effect_calendar_cell)
                     if (dateOfCell == today) {
@@ -142,12 +162,40 @@ class CalendarView @JvmOverloads constructor(
 
     /** 과거 페이지로 이동 */
     fun goToPastPage() {
-        currentItem -= 1
+        setCurrentItem(currentItem - 1, false)
+        AnimationSet(true).apply {
+            val alphaAnimation = AlphaAnimation(0.0f, 1.0f).apply {
+                duration = 300
+                interpolator = DecelerateInterpolator()
+            }
+            val translateAnimation = TranslateAnimation(-75.0f, 0.0f, 0.0f, 0.0f).apply {
+                duration = 150
+                interpolator = DecelerateInterpolator()
+            }
+            addAnimation(alphaAnimation)
+            addAnimation(translateAnimation)
+        }.also {
+            findViewWithTag<View>(currentItem).startAnimation(it)
+        }
     }
 
     /** 미래 페이지로 이동 */
     fun goToFuturePage() {
-        currentItem += 1
+        setCurrentItem(currentItem + 1, false)
+        AnimationSet(true).apply {
+            val alphaAnimation = AlphaAnimation(0.0f, 1.0f).apply {
+                duration = 300
+                interpolator = DecelerateInterpolator()
+            }
+            val translateAnimation = TranslateAnimation(75.0f, 0.0f, 0.0f, 0.0f).apply {
+                duration = 150
+                interpolator = DecelerateInterpolator()
+            }
+            addAnimation(alphaAnimation)
+            addAnimation(translateAnimation)
+        }.also {
+            findViewWithTag<View>(currentItem).startAnimation(it)
+        }
     }
 
     companion object {
